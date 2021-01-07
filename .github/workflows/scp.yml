@@ -13,9 +13,9 @@ jobs:
 
       - name: Set up SSH key
         run: |
-          mkdir ~/.ssh
-          echo ${{ secrets.SSH_KEY }} > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
+          mkdir -p ~/.ssh
+          ssh-keyscan github.com >> ~/.ssh/know_hosts
+          ssh-add - <<<< "${{ secrets.SSH_KEY }}"
       - name: Deploy
         run: scp -r public/ ${{ secrets.USERNAME }}@${{ secrets.HOST }}:${{ secrets.DESTINATION_PATH }}
       # Runs a set of commands using the runners shell
