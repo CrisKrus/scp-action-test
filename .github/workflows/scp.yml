@@ -1,0 +1,21 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up SSH key
+        run: |
+          mkdir ~/.ssh
+          echo {{ secrets.SSH_KEY }} > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+      - name: Deploy
+        run: scp -r public/ {{ secrets.USERNAME }}@{{ secrets.HOST }}:{{ secrets.DESTINATION_PATH }}
+      # Runs a set of commands using the runners shell
